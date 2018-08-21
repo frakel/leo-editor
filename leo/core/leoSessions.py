@@ -81,11 +81,13 @@ class SessionManager(object):
                 g.trace('loading:', fn)
             c2 = g.app.loadManager.loadLocalFile(fn, gui=g.app.gui, old_c=c)
             if c2:
-                for p in c2.all_positions():
-                    if p.get_UNL() == unl:
-                        c2.setCurrentPosition(p)
-                        ### c2.redraw()
-                        break
+                g.trace('looking for', unl)
+                if 0:
+                    for p in c2.all_positions():
+                        if p.get_UNL() == unl:
+                            c2.setCurrentPosition(p)
+                            ### c2.redraw()
+                            break
     #@+node:ekr.20120420054855.14248: *3* SessionManager.load_snapshot
     def load_snapshot(self):
         '''
