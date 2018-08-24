@@ -671,7 +671,24 @@ if QtWidgets:
             if pos is None: pos = 0
             sb = w.verticalScrollBar()
             sb.setSliderPosition(pos)
-        #@+node:ekr.20120925061642.13506: *3* lqtb.onSliderChanged
+        #@+node:ekr.20180824062855.1: *3* lqtb.Event handlers
+        #@+node:ekr.20180824062905.1: *4* lqtb.onFocusIn
+        # Apparently only necessary on some platforms, with some versions of Qt.
+
+        leo_changing_focus = False
+
+        def onFocusIn(self, event):
+            '''Override QTextBrowser.focusInEvent.'''
+            if self.leo_changing_focus:
+                return
+            try:
+                if 'events' in g.app.debug:
+                    g.trace(g.callers())
+                self.leo_changing_focus = True
+                QtWidgets.QTextBrowser.focusInEvent(self, event)
+            finally:
+                self.leo_changing_focus = False
+        #@+node:ekr.20120925061642.13506: *4* lqtb.onSliderChanged
         def onSliderChanged(self, arg):
             '''Handle a Qt onSliderChanged event.'''
             c = self.leo_c
@@ -685,7 +702,7 @@ if QtWidgets:
                 return
             if p:
                 p.v.scrollBarSpot = arg
-        #@+node:tbrown.20130411145310.18855: *3* lqtb.wheelEvent
+        #@+node:tbrown.20130411145310.18855: *4* lqtb.wheelEvent
         def wheelEvent(self, event):
             '''Handle a wheel event.'''
             if QtCore.Qt.ControlModifier & event.modifiers():
